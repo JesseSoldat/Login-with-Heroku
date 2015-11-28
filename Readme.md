@@ -2,9 +2,13 @@
 
 In class our instructor showed us how to create a login page using Heroku on the back end. I am mimicking this to get ready for my final project when we have to create our own login page for our app.
 
+User will not be able to access any other than the home tab without a username and password.
+
 angular / angular-ui-router / angular-cookies / foundation / heroku
 
 
+
+https://login-practice.surge.sh/#/login
 
 
 ## Usage
