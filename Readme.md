@@ -1,6 +1,10 @@
 ## Welcome to My Project
 
-> I am your Readme.md file, you should probably update me.
+In class our instructor showed us how to create a login page using Heroku on the back end. I am mimicking this to get ready for my final project when we have to create our own login page for our app.
+
+angular / angular-ui-router / angular-cookies / foundation / heroku
+
+
 
 
 ## Usage

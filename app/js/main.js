@@ -28,17 +28,23 @@ exports['default'] = config;
 module.exports = exports['default'];
 
 },{}],2:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var HomeController = function HomeController() {};
+var HomeController = function HomeController($scope, UserService, $state) {
 
-HomeController.$inject = [];
+  $scope.logmeout = function () {
+    // console.log('log out');
+    UserService.logout();
+  };
+};
 
-exports["default"] = HomeController;
-module.exports = exports["default"];
+HomeController.$inject = ['$scope', 'UserService', '$state'];
+
+exports['default'] = HomeController;
+module.exports = exports['default'];
 
 },{}],3:[function(require,module,exports){
 'use strict';
@@ -51,6 +57,7 @@ var LoginController = function LoginController($scope, UserService, $cookies, $s
   $scope.login = function (user) {
     UserService.sendLogin(user).then(function (res) {
       console.log(res);
+      UserService.loginSuccess(res);
     });
   };
 };
@@ -106,6 +113,18 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
 
   this.sendLogin = function (userObj) {
     return $http.post(SERVER.URL + 'login', userObj, SERVER.CONFIG);
+  };
+
+  this.loginSuccess = function (res) {
+    $cookies.put('authToken', res.data.auth_token);
+    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
+    $state.go('root.home');
+  };
+
+  this.logout = function () {
+    $cookies.remove('authToken');
+    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = null;
+    $state.go('root.login');
   };
 };
 
