@@ -1,5 +1,17 @@
 let UserService = function($http, SERVER, $cookies, $state) {
 
+  this.checkAuth = function () {
+    let token = $cookies.get('authToken');
+
+    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = token;
+
+    if (token) {
+      return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
+    } else {
+      $state.go('root.login');
+    }
+  };
+
   this.sendLogin = function (userObj) {
     return $http.post(SERVER.URL + 'login', userObj, SERVER.CONFIG);
   };

@@ -35,6 +35,20 @@ Object.defineProperty(exports, '__esModule', {
 });
 var HomeController = function HomeController($scope, UserService, $state) {
 
+  var promise = UserService.checkAuth();
+
+  if (promise) {
+    promise.then(function (res) {
+      console.log(res);
+      if (res.data.status === 'Authentication failed.') {
+        $state.go('root.login');
+        console.log('failed');
+      } else {
+        $scope.message = 'I am logged in';
+      }
+    });
+  }
+
   $scope.logmeout = function () {
     // console.log('log out');
     UserService.logout();
@@ -56,7 +70,7 @@ var LoginController = function LoginController($scope, UserService, $cookies, $s
 
   $scope.login = function (user) {
     UserService.sendLogin(user).then(function (res) {
-      console.log(res);
+      // console.log(res);
       UserService.loginSuccess(res);
     });
   };
@@ -110,6 +124,18 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 var UserService = function UserService($http, SERVER, $cookies, $state) {
+
+  this.checkAuth = function () {
+    var token = $cookies.get('authToken');
+
+    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = token;
+
+    if (token) {
+      return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
+    } else {
+      $state.go('root.login');
+    }
+  };
 
   this.sendLogin = function (userObj) {
     return $http.post(SERVER.URL + 'login', userObj, SERVER.CONFIG);
